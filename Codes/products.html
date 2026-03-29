@@ -1,0 +1,244 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Vinyl Vibes</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../script.js" defer></script>
+
+    <style>
+        /* Body styling */
+        body {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1740&q=80') no-repeat center center/cover;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0,0,0,0.7);
+        }
+
+        header .logo h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2rem;
+            color: #ff4081;
+            margin: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #ffeb3b;
+        }
+
+        h2 {
+            text-align: center;
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5rem;
+            color: #ff4081;
+            margin-bottom: 50px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            padding: 0 50px 100px 50px;
+        }
+
+        .product-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            text-align: center;
+            padding-bottom: 15px;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.6s ease;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.5s;
+            border-bottom: 2px solid #ff4081;
+        }
+
+        .white-bg {
+            background-color: #fff;
+            padding: 15px;
+        }
+
+        .fit-contain img {
+            object-fit: contain;
+        }
+
+        .product-card img:hover {
+            transform: scale(1.1);
+        }
+
+        .product-card h3 {
+            margin-top: 15px;
+            font-family: 'Pacifico', cursive;
+            color: #ffeb3b;
+        }
+
+        .product-card p {
+            margin: 5px 0;
+        }
+
+        .price {
+            color: #00e5ff;
+            font-weight: bold;
+        }
+
+        .show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        
+        .add-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: linear-gradient(45deg,#ff4081,#00e5ff);
+            border: none;
+            color: #fff;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .add-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px #ff4081, 0 0 10px #00e5ff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.7);
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <h1>Vinyl Vibes</h1>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="cart.html">Cart</a></li>
+            <li><a href="login.html">Login</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="products-section">
+    <h2>Our Vinyl Collection</h2>
+    <div class="product-grid" id="productGrid"></div>
+</section>
+
+<footer>
+    <p>&copy; 2026 Vinyl Vibes</p>
+</footer>
+
+<script>
+/* ================= ADD TO CART  ================= */
+function addToCart(product){
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    let existing = cart.find(item => item.title === product.title);
+
+    if(existing){
+        existing.quantity++;
+    } else {
+        product.quantity = 1;
+        cart.push(product);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert("Added to cart!");
+}
+
+/* ================= PRODUCTS ================= */
+const vinyls = [
+    { title: "Karol G - KG0516", year: 2021, genre: "Latin Pop", price: 29.99, img: "https://merchbar.imgix.net/product/69/4968/6960594354239/WK4u7rPUKG-LP-1000x1000---Gold-New.png" },
+    { title: "Bad Bunny - Debi Tirar Mas Fotos", year: 2025, genre: "Latin Pop", price: 34.99, img: "https://m.media-amazon.com/images/I/41D0sM7tTxL.jpg" },
+    { title: "Maluma - 11:11", year: 2019, genre: "Latin Pop", price: 27.99, img: "https://shopmaluma.com/cdn/shop/files/Y4LPML08.png", whiteBg: true },
+    { title: "J Balvin - Vibras", year: 2018, genre: "Latin Pop", price: 25.99, img: "https://jbalvinstore.universalmusica.com/cdn/shop/files/JBalvinBack.png", whiteBg: true },
+
+ { title: "TWICE - Between 1&2", year: 2022, genre: "K-Pop", price: 32.99, img: "https://static.wikia.nocookie.net/b528957d-d74e-4de2-b013-c08cfb261283/scale-to-width/755", whiteBg: true },
+            { title: "Stray Kids - 5-Star", year: 2023, genre: "K-Pop", price: 33.99, img: "https://i.etsystatic.com/41269686/r/il/603758/5638573297/il_794xN.5638573297_ae22.jpg", whiteBg: true },
+            { title: "BLACKPINK - THE ALBUM", year: 2020, genre: "K-Pop", price: 35.99, img: "https://cdn.shopify.com/s/files/1/2723/2340/products/A6E44809-8560-467A-8799-5460C66D01A3_720x720@3x.jpg?v=1617603512", fitContain: true },
+            { title: "BTS - Butter", year: 2021, genre: "K-Pop", price: 36.99, img: "https://images-na.ssl-images-amazon.com/images/I/71DnGo4CPCS._SL1500_.jpg", whiteBg: true, fitContain: true },
+
+
+ { title: "Billie Eilish - Hit Me Hard and Soft", year: 2024, genre: "Pop", price: 34.99, img: "https://th.bing.com/th/id/R.dacd70c092257e91b78b6ea95e19df85?rik=2tFwD33UxnXVPw&riu=http%3a%2f%2fbadlandsvinyl.com%2fcdn%2fshop%2ffiles%2fbillie-eilish-hit-me-hard-and-soft-vinyl-lp-record-170767_540x_de4b9894-1c12-420a-9ca2-ce993d143572.webp%3fv%3d1718088882&ehk=ksXIcs0VH5Qk2DImYX87UP8bSixpN61pmvdfdSiOAR8%3d&risl=&pid=ImgRaw&r=0" },
+            { title: "Harry Styles - Fine Line", year: 2019, genre: "Pop", price: 29.99, img: "https://i.pinimg.com/736x/db/0a/35/db0a35c5336592a4cbe3ef597be17282.jpg" },
+            { title: "Charli XCX - Brat", year: 2024, genre: "Pop", price: 31.99, img: "https://th.bing.com/th/id/R.32a046513a0c84c0e8c15eed7e5d4267?rik=kl4OJ2hWQ9HqJw&riu=http%3a%2f%2fbadlandsvinyl.com%2fcdn%2fshop%2ffiles%2f678125-Product-0-I-638477208004363171.webp%3fv%3d1724821849&ehk=2rewdaDMXwCWKEx6KXUPfNfNVSDkWND6QmicKPN7n9E%3d&risl=&pid=ImgRaw&r=0" },
+            { title: "Ed Sheeran - x (Multiply)", year: 2014, genre: "Pop", price: 24.99, img: "https://store.edsheeran.com/dw/image/v2/BHCC_PRD/on/demandware.static/-/Sites-warner-master/default/dw37dcf862/pdp-img-eu/14es_blackvinyl.jpg?sw=600&sh=600&sm=fit" },
+
+ { title: "SZA - Ctrl", year: 2017, genre: "R&B", price: 25.99, img:"https://th.bing.com/th/id/R.090fd120cf51b55c2cd7b33f6e8df4ee?rik=MOOFsB6R2mw%2f5g&riu=http%3a%2f%2fvinyl.com%2fcdn%2fshop%2fproducts%2fSZA_vinyl_ctrl_2LP_1200x1200.jpg%3fv%3d1677728584&ehk=gdAtrCVWIOsRsqpSpL2s8mWnXcXOvE28fRAvMil7TXE%3d&risl=&pid=ImgRaw&r=0" },
+            { title: "Usher - Confessions", year: 2004, genre: "R&B", price: 20.99, img:"https://vinyla.com/files/products/a6/33/200993/vinilovi-plativki-usher-confessions-special-edition_1.1280x1280.jpg?91f3f897229c1bbfdc20d886f9017e09" },
+            { title: "H.E.R. - Vol. 2", year: 2016, genre: "R&B", price: 23.99, img:"https://tse2.mm.bing.net/th/id/OIP.UNnvVQeWSijt-lbgQsI1tAHaHa?rs=1&pid=ImgDetMain&o=7", whiteBg: true },
+            { title:"Frank Ocean - Blonde", year: 2016, genre: "R&B", price: 20.99, img:"https://tse4.mm.bing.net/th/id/OIP.Aku3NI5q2xuLLGu2HQJEdAHaHa?rs=1&pid=ImgDetMain&o=7" },
+];
+
+const grid = document.getElementById('productGrid');
+
+vinyls.forEach((vinyl, index) => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+
+    const innerDivClasses = [];
+    if(vinyl.whiteBg) innerDivClasses.push('white-bg');
+    if(vinyl.fitContain) innerDivClasses.push('fit-contain');
+
+    card.innerHTML = `
+        <div class="${innerDivClasses.join(' ')}">
+            <img src="${vinyl.img}" alt="${vinyl.title}">
+        </div>
+        <h3>${vinyl.title}</h3>
+        <p>${vinyl.genre} - ${vinyl.year}</p>
+        <p class="price">$${vinyl.price.toFixed(2)}</p>
+        <button class="add-btn">Add to Cart</button>
+    `;
+
+    /* EVENT LISTENER (NO INLINE JS) */
+    card.querySelector(".add-btn")
+        .addEventListener("click", () => addToCart(vinyl));
+
+    grid.appendChild(card);
+
+    setTimeout(() => {
+        card.classList.add('show');
+    }, index * 150);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinyl Vibes - About Us</title>
+
+<link rel="stylesheet" href="../style.css">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    font-family:'Roboto',sans-serif;
+    margin:0;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1740&q=80') center/cover no-repeat;
+    color:#fff;
+}
+
+header {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:20px 50px; background:rgba(0,0,0,0.7);
+}
+
+header .logo h1 { font-family:'Pacifico',cursive; color:#ff4081; }
+
+nav ul { list-style:none; display:flex; gap:30px; }
+
+nav a { color:#fff; text-decoration:none; font-weight:bold; }
+
+nav a:hover { color:#00e5ff; }
+
+h2 {
+    text-align:center;
+    margin:50px 0;
+    font-family:'Pacifico',cursive;
+    color:#ff4081;
+}
+
+.about-container {
+    max-width:900px;
+    margin:auto;
+    padding:30px;
+    background: rgba(255,255,255,0.05);
+    border-radius:15px;
+}
+
+.about-container h3 {
+    font-family:'Pacifico',cursive;
+    color:#ffeb3b;
+    margin-bottom:15px;
+}
+
+.about-container p {
+    line-height:1.6;
+    margin-bottom:20px;
+}
+
+footer {
+    text-align:center;
+    padding:30px;
+    background: rgba(0,0,0,0.7);
+    margin-top:50px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo"><h1>Vinyl Vibes</h1></div>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="cart.html">Cart <span id="cartCount" style="background:#ff4081;color:#fff;padding:2px 8px;border-radius:50%;font-size:0.8rem;margin-left:5px;">0</span></a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </nav>
+</header>
+
+<h2>About Us</h2>
+
+<div class="about-container">
+
+    <!-- BUSINESS DESCRIPTION -->
+    <p>At Vinyl Vibes, we believe music is more than sound—it’s an experience. Our store was born out of a passion for preserving the timeless artistry of vinyl records while celebrating the vibrant energy of today’s most popular genres. From the soulful rhythms of R&B to the infectious beats of Latin music, the polished perfection of K-pop, and the nostalgic charm of pop classics, we curate a collection that speaks to every kind of listener.</p>
+
+    <p>We’re more than just a shop—we’re a community for music lovers who value the warmth, authenticity, and artistry that only vinyl can deliver. Whether you’re a seasoned collector or just starting your journey, our shelves are filled with records that bring joy, spark memories, and introduce you to new sounds. At Vinyl Vibes, every spin is a story, and every record is a chance to connect with music in its purest form.</p> 
+
+    <p>Our mission is to keep the spirit of vinyl alive while making it accessible to a new generation of fans. That means offering carefully curated selections, limited editions, and exclusive imports you won’t find anywhere else. We’re here to help you discover your next favorite album, grow your collection, and celebrate the artists who shape the soundtrack of our lives.</p>
+
+    <!-- STUDENT DETAILS -->
+    <h3>Student Information</h3>
+    <p><strong>Full Name:</strong> Romae Pryce </p>
+    <p><strong>ID Number:</strong> 2111796</p>
+    <p><strong>Email:</strong> romaeapryce@utech.edu.jm</p>
+    <p><strong>Module Code:</strong> CIT2011</p>
+    <p><strong>Assignment:</strong> IA#2 E-Commerce Website</p>
+    <p><strong>Class Time:</strong> Monday-5:00pm & Friday-8:00am </p>
+
+    <!-- MAILTO LINK  -->
+    <h3>Contact Us</h3>
+    <p>
+        Have questions or feedback? 
+        <a href="mailto:2111796@utech.edu.jm">Send Email</a>
+        </a>
+    </p>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Vinyl Vibes. All rights reserved.</p>
+</footer>
+
+<script>
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let totalCount = 0;
+    cart.forEach(item => totalCount += item.quantity || 1);
+    const cartCountEl = document.getElementById('cartCount');
+    if(cartCountEl) cartCountEl.textContent = totalCount;
+}
+updateCartCount();
+</script>
+
+</body>
+</html>

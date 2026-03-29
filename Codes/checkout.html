@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinyl Vibes - Checkout</title>
+<link rel="stylesheet" href="../style.css">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+    body { font-family:'Roboto',sans-serif; background:#111; color:#fff; margin:0;}
+    header, footer { background: rgba(0,0,0,0.7); padding:20px 50px; }
+    header .logo h1 { font-family:'Pacifico',cursive; color:#ff4081; display:inline;}
+    nav ul { list-style:none; display:flex; gap:30px;}
+    nav a { color:#fff; text-decoration:none; font-weight:bold;}
+    nav a:hover { color:#00e5ff;}
+    h2 { text-align:center; font-family:'Pacifico',cursive; color:#ff4081; margin:50px 0;}
+    
+    .checkout-form { max-width:500px; margin:auto; padding:20px; background:rgba(255,255,255,0.05); border-radius:10px; position:relative;}
+    .checkout-form label { display:block; margin:15px 0 5px; }
+    .checkout-form input { width:100%; padding:10px; border-radius:5px; border:none;}
+    .btn { margin-top:20px; display:block; width:100%; padding:15px; background: linear-gradient(45deg,#ff4081,#00e5ff); color:#fff; font-weight:bold; border-radius:50px; text-align:center; text-decoration:none; cursor:pointer; }
+    .btn:hover { transform:scale(1.05); box-shadow:0 0 15px #ff4081,0 0 15px #00e5ff; }
+    
+    .cart-summary { max-width:500px; margin:30px auto; padding:20px; background: rgba(255,255,255,0.05); border-radius:10px; }
+    .cart-summary h3 { font-family:'Pacifico', cursive; color:#ffeb3b; margin-bottom:10px; }
+    .cart-summary p { margin:5px 0; }
+    .grand-total { font-weight:bold; color:#ffeb3b; font-size:1.2rem; }
+
+    #closeBtn { background:#555; margin-top:10px; }
+    #closeBtn:hover { background:#777; }
+
+    .empty-cart-msg { text-align:center; margin-top:50px; }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><h1>Vinyl Vibes</h1></div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="cart.html">Cart</a></li>
+            <li><a href="about.html">About Us</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h2>Checkout</h2>
+
+<div class="checkout-form" id="checkoutForm">
+    <label>Name</label>
+    <input type="text" id="name" placeholder="Full Name">
+    <label>Email</label>
+    <input type="email" id="email" placeholder="Email Address">
+    <label>Address</label>
+    <input type="text" id="address" placeholder="Shipping Address">
+    <label>City</label>
+    <input type="text" id="city" placeholder="City">
+    <label>Postal Code</label>
+    <input type="text" id="postal" placeholder="Postal Code">
+    
+    <button class="btn" id="confirmBtn">Confirm Order</button>
+    <button class="btn" id="clearBtn">Clear All</button>
+    <button class="btn" id="closeBtn">Close</button>
+</div>
+
+<div class="cart-summary" id="cartSummary"></div>
+<div class="empty-cart-msg" id="emptyMsg"></div>
+
+<footer>
+    <p>&copy; 2026 Vinyl Vibes. All rights reserved.</p>
+</footer>
+
+<script>
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const checkoutForm = document.getElementById('checkoutForm');
+    const emptyMsg = document.getElementById('emptyMsg');
+    const cartSummary = document.getElementById('cartSummary');
+
+    const DISCOUNT_RATE = 0.1; // 10%
+    const TAX_RATE = 0.07; // 7%
+
+    function renderCartSummary() {
+        if(cart.length === 0){
+            cartSummary.style.display = "none";
+            checkoutForm.style.display = "none";
+            emptyMsg.innerHTML = "Your cart is empty 🛒. Please add items first.";
+            return;
+        }
+
+        let subtotal = 0;
+        let summaryHTML = "<h3>Cart Summary</h3>";
+
+        cart.forEach(item => {
+            const qty = item.quantity || 1;
+            const itemTotal = item.price * qty;
+            subtotal += itemTotal;
+            summaryHTML += `<p>${item.title} x${qty} - $${itemTotal.toFixed(2)}</p>`;
+        });
+
+        const discount = subtotal * DISCOUNT_RATE;
+        const tax = (subtotal - discount) * TAX_RATE;
+        const grandTotal = subtotal - discount + tax;
+
+        summaryHTML += `<p>Subtotal: $${subtotal.toFixed(2)}</p>`;
+        summaryHTML += `<p>Discount (10%): -$${discount.toFixed(2)}</p>`;
+        summaryHTML += `<p>Tax (7%): +$${tax.toFixed(2)}</p>`;
+        summaryHTML += `<p class="grand-total">Grand Total: $${grandTotal.toFixed(2)}</p>`;
+
+        cartSummary.innerHTML = summaryHTML;
+    }
+
+    function placeOrder(){
+        alert("Thank you! Your order has been placed ✅");
+        localStorage.removeItem('cart');
+        window.location.href = "index.html";
+    }
+
+    function clearCart(){
+        localStorage.removeItem('cart');
+        renderCartSummary();
+        checkoutForm.style.display = "none";
+        emptyMsg.innerHTML = "Your cart is empty 🛒. Please add items first.";
+    }
+
+    document.getElementById("confirmBtn").addEventListener("click", placeOrder);
+    document.getElementById("clearBtn").addEventListener("click", clearCart);
+    document.getElementById("closeBtn").addEventListener("click", () => {
+        checkoutForm.style.display = "none";
+        cartSummary.style.display = "none";
+    });
+
+    renderCartSummary();
+</script>
+
+</body>
+</html>
