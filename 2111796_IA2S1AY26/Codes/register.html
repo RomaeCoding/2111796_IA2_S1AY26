@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinyl Vibes - Register</title>
+<link rel="stylesheet" href="../style.css">
+<script src="script.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    font-family:'Roboto',sans-serif;
+    margin:0;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1740&q=80') center/cover no-repeat;
+    color:#fff;
+}
+
+h2 {
+    text-align:center;
+    margin:50px 0;
+    font-family:'Pacifico',cursive;
+    color:#ff4081;
+}
+
+.register-container {
+    max-width:400px;
+    margin:50px auto;
+    background: rgba(255,255,255,0.05);
+    padding:30px;
+    border-radius:15px;
+    text-align:center;
+}
+
+.register-container input {
+    width:80%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:10px;
+    border:none;
+}
+
+.register-container button {
+    padding:10px 30px;
+    background: linear-gradient(45deg,#ff4081,#00e5ff);
+    color:#fff;
+    border:none;
+    border-radius:50px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.register-container button:hover {
+    transform:scale(1.05);
+}
+
+.register-container p {
+    margin-top:15px;
+    font-size:0.9rem;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Create Account</h2>
+
+<div class="register-container">
+    <input type="text" id="username" placeholder="Username">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <input type="text" placeholder="Full Name">
+    <input type="date"placeholder="D.O.B">
+    \=[-p0oi8ug,b4jo 8
+    
+    <button onclick="register()">Register</button>
+
+    <p id="registerMsg"></p>
+    <p>Already have an account? <a href="login.html" style="color:#00e5ff;">Login</a></p>
+</div>
+
+<script>
+function register(){
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const msg = document.getElementById('registerMsg');
+
+    if(!username || !email || !password){
+        msg.style.color = "red";
+        msg.textContent = "All fields are required!";
+        return;
+    }
+
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+
+    let exists = users.find(user => user.username === username);
+
+    if(exists){
+        msg.style.color = "red";
+        msg.textContent = "Username already exists!";
+        return;
+    }
+
+    users.push({ username, email, password });
+    localStorage.setItem('users', JSON.stringify(users));
+
+    msg.style.color = "lightgreen";
+    msg.textContent = "Registration successful! Redirecting...";
+
+    setTimeout(()=>{
+        window.location.href = "login.html";
+    },1500);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinyl Vibes - Cart</title>
+        <link rel="stylesheet" href="../style.css">
+        <script src="../script.js" defer></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif; }
+        body { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1740&q=80') no-repeat center center/cover; color:#fff; }
+
+        header { display:flex; justify-content:space-between; align-items:center; padding:20px 50px; background: rgba(0,0,0,0.7);}
+        .logo { display:flex; align-items:center; gap:10px;}
+        .logo img { width:50px; border-radius:50%;}
+        .logo h1 { font-family:'Pacifico',cursive; color:#ff4081;}
+        nav ul { list-style:none; display:flex; gap:30px;}
+        nav a { text-decoration:none; color:#fff; font-weight:bold;}
+        nav a:hover { color:#00e5ff;}
+
+        h2 { text-align:center; margin:50px 0; font-family:'Pacifico', cursive; color:#ff4081; }
+
+        .cart-container { max-width:900px; margin:auto; padding:20px;}
+        .cart-item { display:flex; align-items:center; justify-content:space-between; background: rgba(255,255,255,0.05); padding:15px; border-radius:10px; margin-bottom:20px;}
+        .cart-item img { width:80px; border-radius:10px; }
+        .cart-info { flex:1; margin-left:20px; }
+        .cart-info h3 { font-family:'Pacifico', cursive; color:#ffeb3b;}
+        .price { color:#00e5ff; font-weight:bold;}
+        .quantity { display:flex; align-items:center; gap:10px; margin-top:5px;}
+        .quantity button { background:#ff4081; border:none; padding:5px 10px; color:#fff; border-radius:5px; cursor:pointer;}
+        .quantity button:hover { background:#ff1c6b;}
+        .totals { max-width:900px; margin:auto; text-align:right; font-size:1.2rem; margin-top:30px; }
+        .totals p { margin:5px 0; }
+        .grand-total { font-size:1.5rem; font-weight:bold; color:#ffeb3b; }
+
+        .empty { text-align:center; margin-top:50px; font-size:1.2rem; }
+        .checkout-btn { display:block; margin: 30px auto; padding:15px 40px; background: linear-gradient(45deg,#ff4081,#00e5ff); color:#fff; font-weight:bold; border-radius:50px; text-align:center; text-decoration:none; transition:0.4s;}
+        .checkout-btn:hover { transform:scale(1.1); box-shadow:0 0 15px #ff4081,0 0 15px #00e5ff; }
+
+        footer { text-align:center; padding:30px; background: rgba(0,0,0,0.7); margin-top:50px; }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header>
+        <div class="logo">
+            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=60&q=80" alt="Vinyl Vibes Logo">
+            <h1>Vinyl Vibes</h1>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <h2>Your Cart</h2>
+    <div class="cart-container" id="cartContainer"></div>
+
+    <div class="totals" id="totalsContainer">
+        <!-- Subtotal, Discount, Tax, Grand Total will be dynamically generated -->
+    </div>
+
+    <a href="checkout.html" class="checkout-btn" id="checkoutBtn">Proceed to Checkout</a>
+
+    <footer>
+        <p>&copy; 2026 Vinyl Vibes. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Get cart from localStorage
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartContainer = document.getElementById('cartContainer');
+        const totalsContainer = document.getElementById('totalsContainer');
+
+        const DISCOUNT_RATE = 0.1; // 10% discount
+        const TAX_RATE = 0.07; // 7% tax
+
+        function renderCart() {
+            cartContainer.innerHTML = "";
+            totalsContainer.innerHTML = "";
+
+            if(cart.length === 0) {
+                cartContainer.innerHTML = "<p class='empty'>Your cart is empty 🛒</p>";
+                document.getElementById('checkoutBtn').style.display = "none";
+                return;
+            }
+            document.getElementById('checkoutBtn').style.display = "block";
+
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                subtotal += item.price * (item.quantity || 1);
+                const div = document.createElement('div');
+                div.className = "cart-item";
+                div.innerHTML = `
+                    <img src="${item.img}" alt="${item.title}">
+                    <div class="cart-info">
+                        <h3>${item.title}</h3>
+                        <p>${item.genre} - ${item.year}</p>
+                        <p class="price">$${(item.price*(item.quantity||1)).toFixed(2)}</p>
+                        <div class="quantity">
+                            <button onclick="decreaseQuantity(${index})">-</button>
+                            <span>${item.quantity || 1}</span>
+                            <button onclick="increaseQuantity(${index})">+</button>
+                        </div>
+                    </div>
+                    <button onclick="removeItem(${index})">Remove</button>
+                `;
+                cartContainer.appendChild(div);
+            });
+
+            const discount = subtotal * DISCOUNT_RATE;
+            const tax = (subtotal - discount) * TAX_RATE;
+            const grandTotal = subtotal - discount + tax;
+
+            totalsContainer.innerHTML = `
+                <p>Subtotal: $${subtotal.toFixed(2)}</p>
+                <p>Discount (10%): -$${discount.toFixed(2)}</p>
+                <p>Tax (7%): +$${tax.toFixed(2)}</p>
+                <p class="grand-total">Grand Total: $${grandTotal.toFixed(2)}</p>
+            `;
+        }
+
+        function removeItem(index) {
+            cart.splice(index,1);
+            saveCart();
+            renderCart();
+        }
+
+        function increaseQuantity(index) {
+            cart[index].quantity = (cart[index].quantity || 1) + 1;
+            saveCart();
+            renderCart();
+        }
+
+        function decreaseQuantity(index) {
+            if(cart[index].quantity > 1) {
+                cart[index].quantity--;
+            } else {
+                cart.splice(index,1);
+            }
+            saveCart();
+            renderCart();
+        }
+
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        renderCart();
+    </script>
+
+</body>
+</html>
